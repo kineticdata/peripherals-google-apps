@@ -1,0 +1,39 @@
+== GoogleApps_Group_Create
+This handler creates a new Google Apps group.
+
+=== Parameters
+[Group Name]
+  The display name of the group to create.
+[Group ID]
+  The id of the group to create.  For example, the 'test.group@acme.com' group
+  id would be 'test.group'.
+[Group Description]
+  A brief description of the new group.
+[Group Permission]
+  Choose who will be able to send email to the group.
+
+=== Results
+This handler returns no results.
+
+==== Sample Configuration
+Group Name:              Test Group
+Group ID:                test.group
+Group Description:       This group is for testing purposes
+Group Permission:        Anyone   
+
+=== Detailed Description
+This handler uses the Google Provisioning API library to create a 
+new Google Group on your domain. If the input variables are verified
+to be legal, then the new group will be created using that information.
+If Google finds a duplicate group id during this process an exception
+will be thrown because group id's are required to be unique. If the group
+is successfully created, the specified owner will be assigned to the
+group with admin privileges. Any errors that occur during the posting 
+process will be caught and re-raised by this handler.
+
+* Provisioning API must be enabled. To do so, you must:
+  1. Log in to your admin account and select either the "Domain Settings" or 
+     "Users and groups" tab, depending on what control panel version you have.
+  2. Select the Settings tab.
+  3. Select the checkbox to enable the Provisioning API.
+  4. Save your changes.

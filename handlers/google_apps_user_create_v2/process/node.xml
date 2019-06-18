@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<taskDefinition id="google_apps_user_create" name="Google Apps User Create" schema_version="1.0" version="2">
+    <author>support@kineticdata.com</author>
+    <description>This handler creates a new user</description>
+    <helpurl>http://ktc.kineticdata.com/handler/google_apps_user_create/2</helpurl>
+    <visible>true</visible>
+    <deferrable>false</deferrable>
+    <parameters>
+        <parameter id="username" label="Username" required="true"
+            tooltip="The username for the new user."/>
+        <parameter id="first_name" label="First Name" required="true"
+            tooltip="The first name of the new user."/>
+        <parameter id="last_name" label="Last Name" required="true"
+            tooltip="The last name of the new user."/>
+        <parameter id="password" label="Password" required="true"
+            tooltip="The password for the new user. Must be 8 characters or longer."/>
+    </parameters>
+    <handler name="google_apps_user_create" version="2">
+        <infos>
+            <info name="admin_email">&lt;%= @info['admin_email'] %&gt;</info>
+            <info name="admin_password">&lt;%= @info['admin_password'] %&gt;</info>
+            <info name="enable_debug_logging">&lt;%= @info['enable_debug_logging'] %&gt;</info>
+        </infos>
+        <parameters>
+            <parameter name="username">&lt;%= @parameters['username'] %&gt;</parameter>
+            <parameter name="first_name">&lt;%= @parameters['first_name'] %&gt;</parameter>
+            <parameter name="last_name">&lt;%= @parameters['last_name'] %&gt;</parameter>
+            <parameter name="password">&lt;%= @parameters['password'] %&gt;</parameter>
+        </parameters>
+    </handler>
+    <results format="xml"/>
+</taskDefinition>

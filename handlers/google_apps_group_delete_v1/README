@@ -1,0 +1,26 @@
+== GoogleApps_Group_Delete
+This handler deletes an existing Google Apps group.
+
+=== Parameters
+[Group]
+  The address or id of the group to delete.  The group id of the 
+  'test.group@acme.com' email is 'test.group'.
+
+=== Results
+This handler returns no results.
+
+==== Sample Configuration
+Group:                test.group
+
+=== Detailed Description
+This handler uses the Google Provisioning API library to delete a Google 
+Group on your domain. If the inputted group finds a match on your domain,
+that matching group will then be deleted. Any errors that occur during the 
+posting process will be caught and re-raised by this handler.
+
+* Provisioning API must be enabled. To do so, you must:
+  1. Log in to your admin account and select either the "Domain Settings" or 
+     "Users and groups" tab, depending on what control panel version you have.
+  2. Select the Settings tab.
+  3. Select the checkbox to enable the Provisioning API.
+  4. Save your changes.

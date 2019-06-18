@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<taskDefinition id="google_apps_calendar_event_create" name="Google Apps Calendar Event Create" schema_version="1.0" version="2">
+    <author>support@kineticdata.com</author>
+    <description>This handler creates a new Google Calendar event.</description>
+    <helpurl>http://ktc.kineticdata.com/handler/google_apps_calendar_event_create/2</helpurl>
+    <visible>true</visible>
+    <deferrable>false</deferrable>
+    <parameters>
+        <parameter id="calendar_id" label="Calendar Id" required="true"
+            tooltip="The id of the calendar this event will be added to. The default calendar id is the accounts email address."/>
+        <parameter id="title" label="Event Title" required="true"
+            tooltip="The title of the new event."/>
+        <parameter id="location" label="Location" required="false"
+            tooltip="The location of the new event."/>
+        <parameter id="description" label="Description" required="false"
+            tooltip="A description for the new event."/>
+        <parameter id="start" label="Start" required="true"
+            tooltip="The start of the new event in 'YYYY-MM-DD' format (will automatically set is_all_day to 'true') or 'YYYY-MM-DDTHH:MM:SS' in 24hr time (13:00 == 1:00PM) if it is a normal event."/>
+        <parameter id="end" label="End" required="true"
+            tooltip="The end of the new event in 'YYYY-MM-DD' format (will automatically set is_all_day to 'true') or 'YYYY-MM-DDTHH:MM:SS' in 24hr time (13:00 == 1:00PM) if it is a normal event."/>
+        <parameter id="is_all_day" label="Is All Day Event" required="false"
+            tooltip="If it is an all day event the text should be set to 'true'. Any other text (including being left blank) will be assumed that it is not an all day event." />
+        <parameter id="attendees" label="Attendees" required="false"
+            tooltip="The email addresses of people who are being invited to this event, separated by commas."/>
+        <parameter id="send_notifications" label="Send Notifications" required="true"
+            tooltip="Specifies whether the specified attendees should receive email notification of their invitation."
+            menu="Yes,No"/> 
+    </parameters>
+    <handler name="google_apps_calendar_event_create" version="2">
+        <infos>
+            <info name="client_id">&lt;%= @info['client_id'] %&gt;</info>
+            <info name="client_secret">&lt;%= @info['client_secret'] %&gt;</info>
+            <info name="refresh_token">&lt;%= @info['refresh_token'] %&gt;</info>
+            <info name="enable_debug_logging">&lt;%= @info['enable_debug_logging'] %&gt;</info>
+        </infos>
+        <parameters>
+            <parameter name="calendar_id">&lt;%= @parameters['calendar_id'] %&gt;</parameter>
+            <parameter name="title">&lt;%= @parameters['title'] %&gt;</parameter>
+            <parameter name="location">&lt;%= @parameters['location'] %&gt;</parameter>
+            <parameter name="description">&lt;%= @parameters['description'] %&gt;</parameter>
+            <parameter name="start">&lt;%= @parameters['start'] %&gt;</parameter>
+            <parameter name="end">&lt;%= @parameters['end'] %&gt;</parameter>
+            <parameter name="is_all_day">&lt;%= @parameters['is_all_day'] %&gt;</parameter>
+            <parameter name="attendees">&lt;%= @parameters['attendees'] %&gt;</parameter>
+            <parameter name="send_notifications">&lt;%= @parameters['send_notifications'] %&gt;</parameter>
+        </parameters>
+    </handler>
+    <results format="xml"/>
+</taskDefinition>

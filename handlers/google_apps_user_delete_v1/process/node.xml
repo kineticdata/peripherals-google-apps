@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<taskDefinition id="google_apps_user_delete" name="Google Apps User Delete" schema_version="1.0" version="1">
+    <author>support@kineticdata.com</author>
+    <description>This handler deletes a user from the domain database</description>
+    <helpurl>http://ktc.kineticdata.com/handler/google_apps_user_delete/1</helpurl>
+    <visible>true</visible>
+    <deferrable>false</deferrable>
+    <parameters>
+        <parameter id="username" label="Username" required="true"
+            tooltip="The username of the user you wish to delete."/>
+    </parameters>
+    <handler name="google_apps_user_delete" version="1">
+        <infos>
+            <info name="admin_email">&lt;%= @info['admin_email'] %&gt;</info>
+            <info name="admin_password">&lt;%= @info['admin_password'] %&gt;</info>
+            <info name="enable_debug_logging">&lt;%= @info['enable_debug_logging'] %&gt;</info>
+        </infos>
+        <parameters>
+            <parameter name="username">&lt;%= @parameters['username'] %&gt;</parameter>
+        </parameters>
+    </handler>
+    <results format="xml"/>
+</taskDefinition>

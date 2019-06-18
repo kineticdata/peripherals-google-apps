@@ -1,0 +1,6 @@
+Google_Apps_User_Create_V1 (2011-04-13)
+* Initial version.  See README for details.
+
+GoogleApps_User_Create_V2 (2012-06-21)
+* The creation process now uses the GApps
+  Provisioning API instead of a raw SOAP call. 

@@ -1,0 +1,7 @@
+Commented out line 1 in autoparse-0.3.3/lib/compat/multi_json.rb. This implements compatibility with Kintic Task handlers (doesn't look for multi_json >= 1.0.0 because it has already been loaded).
+
+Commented out line 1 in signet-0.5.0/lib/compat/multi_json.rb. This implements compatibility with Kintic Task handlers (doesn't look for multi_json >= 1.0.0 because it has already been loaded).
+
+Lines 36 and 37 modified in extlib-0.9.15/lib/extlib.rb. This adds the version constant that is easier to access to implement the functionalities required for dependencies.rb.
+
+Lines 12 and 13 modified in jwt-0.1.5/lib/jwt.rb. This adds the version constant that is easier to access to implement the functionalities required for dependencies.rb.

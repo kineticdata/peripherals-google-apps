@@ -1,0 +1,87 @@
+== GoogleApps_Calendar_EventCreate
+This handler creates a new Google Calendar event.
+
+=== Parameters
+[Name Type]
+  If using the default calendar choose 'Default', otherwise specify the 
+  calendar 'By Name'.
+[Calendar Name]
+  The name of the calendar this event will be added to.
+[Event Title]
+  The title of the new event.
+[Location]
+  The location of the new event.
+[Description]
+  A description for the new event.
+[Start Date]
+  The starting date for this event. The date format is YYYY-MM-DD.
+[Start Time]
+  The start time of the event. If this is an all-day event, leave this blank.
+  The time format is HH:MM:SS.
+[End Date]
+  The ending date for this event. The date format is YYYY-MM-DD.
+[End Time]
+  The end time of the event. If this is an all-day event, leave this 
+  blank. The time format is HH:MM:SS.
+[Attendees]
+  The email addresses of people who are being invited to this event,
+  separated by commas.
+[Send Notifications]
+  Specifies whether the specified attendees should receive email notification
+  of their invitation.
+
+=== Results
+This handler returns no results.
+
+==== Sample Configuration
+Calendar Name:           Example Calendar
+Event Title:             New Event
+Location:                Somewhere Out There
+Description:             This is a test event
+Start Date:              2012-06-15
+Start Time:              13:00:00
+End Date:                2012-06-15
+End Time:                15:00:00
+Attendees:               test.account1@gmail.com, test.account2@gmail.com
+Send Notifications:      Yes
+
+=== Detailed Description
+This handler uses the Google API library to create a new Event and then
+inserts it into your calendar. The handler needs a refresh token and the 
+cooresponding client id and client secret to authenticate the calendar insert
+request (information on how to retrieve can be found below). The parameters
+for the event are slightly modified so that they work within Google's API and 
+then the new event is posted to the calendar of your choice. Any errors 
+that occur during the posting process will be caught and re-raised by 
+this handler.
+
+* In order to use this handler, the account specified by the task info
+values needs to enable Calendar API in admin account.
+
+==== How to retrieve the Client Id, Client Secret, and Refresh Token
+  To enable the Calendar API and get Client Id and Client Secret:
+      1. Navigate to the 'Google Developers Console'
+      2. Click on the Create Project button (or if you have an existing
+         project that you wish to keep using, click on the project name.)
+      3. Go to the APIs page and turn on the Calendar service
+      4. Go to the Credientials page and Create a new Client Id
+          * Select 'Installed Application' for the application type
+          * Select 'Other' for the Installed Application Type
+
+  To retrieve the Refresh Token for the account you want to post to
+      1. Put this url into your browser, while substiuting [:client_id] for
+         the client id of your application
+      * https://accounts.google.com/o/oauth2/auth?client_id=[:client_id]&redirect_uri=urn:ietf:wg:oauth:2.0:oob&scope=https://www.googleapis.com/auth/calendar&response_type=code&access_type=offline
+
+      2. Choose or add the account that you wish to connect the handler with
+      3. Click accept to give your application permission to modify the calendar
+      4. Copy and paste the success code that appears on the page
+      5. Send a post request to get the refresh token
+          * This can either done with Curl or with a browser extension like
+            Advanced REST Client in Chrome (A sample curl call is below)
+
+            POST URL = https://accounts.google.com/o/oauth2/token
+            POST Parameters: code=[:code]&client_id=[:client_id]&client_secret=[:client_secret]&redirect_uri=urn:ietf:wg:oauth:2.0:oob&grant_type=authorization_code
+
+            Sample Curl Call:
+              curl -- data "code=[:code]&client_id=[:client_id]&client_secret=[:client_secret]&redirect_uri=urn:ietf:wg:oauth:2.0:oob&grant_type=authorization_code" https://accounts.google.com/o/oauth2/token

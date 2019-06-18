@@ -1,0 +1,34 @@
+== GoogleApps_User_Create
+This handler creates a new Google Apps user account.
+
+=== Parameters
+[Username]
+  The username for the new user.
+[First Name]
+  The first name of the new user
+[Last Name]
+  The last name of the new user.
+[Password]
+  The password for the new user. Must be 8 characters or longer.
+
+=== Results
+This handler returns no results.
+
+==== Sample Configuration
+Username:                test.account
+First Name:              Test
+Last Name:               Account
+Password:                password
+
+
+=== Detailed Description
+This handler creates a new Google Apps user account using the Provisioning API.
+Any errors that occur during the account creation process will be caught and
+re-raised by this handler.
+
+* Provisioning API must be enabled. To do so, you must:
+    1. Log in to your admin account and select either the "Domain Settings" or 
+       "Users and groups" tab, depending on what control panel version you have.
+    2. Select the Settings tab.
+    3. Select the checkbox to enable the Provisioning API.
+    4. Save your changes.

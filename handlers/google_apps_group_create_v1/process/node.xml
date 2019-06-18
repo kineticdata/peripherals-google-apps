@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<taskDefinition id="google_apps_group_create" name="Google Apps Group Create" schema_version="1.0" version="1">
+    <author>support@kineticdata.com</author>
+    <description>This handler creates a new Google Apps group.</description>
+    <helpurl>http://ktc.kineticdata.com/handler/google_apps_group_create/1</helpurl>
+    <visible>true</visible>
+    <deferrable>false</deferrable>
+    <parameters>
+        <parameter id="group_name" label="Group Name" required="true"
+            tooltip="The display name of the group to create."/>
+        <parameter id="group_id" label="Group ID" required="true"
+            tooltip="The id of the group to create.  For example, the 'test.group@acme.com' group id would be 'test.group'."/>
+        <parameter id="group_description" label="Group Description:" required="false"
+            tooltip="A brief description of the new group."/>
+        <parameter id="group_permission" label="Group Permission" required="false"
+            tooltip="Choose who will be able to send email to the group."
+            menu="Anyone,Domain,Member,Owner"/>
+    </parameters>
+    <handler name="google_apps_group_create" version="1">
+        <infos>
+            <info name="admin_email">&lt;%= @info['admin_email'] %&gt;</info>
+            <info name="admin_password">&lt;%= @info['admin_password'] %&gt;</info>
+            <info name="enable_debug_logging">&lt;%= @info['enable_debug_logging'] %&gt;</info>
+        </infos>
+        <parameters>
+            <parameter name="group_name">&lt;%= @parameters['group_name'] %&gt;</parameter>
+            <parameter name="group_id">&lt;%= @parameters['group_id'] %&gt;</parameter>
+            <parameter name="group_description">&lt;%= @parameters['group_description'] %&gt;</parameter>
+            <parameter name="group_permission">&lt;%= @parameters['group_permission'] %&gt;</parameter>
+        </parameters>
+    </handler>
+    <results format="xml"/>
+</taskDefinition>

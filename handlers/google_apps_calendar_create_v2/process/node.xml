@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<taskDefinition id="google_apps_calendar_create" name="Google Apps Calendar Create" schema_version="1.0" version="2">
+    <author>support@kineticdata.com</author>
+    <description>This handler creates a new event in Google Calendar</description>
+    <helpurl>http://ktc.kineticdata.com/handler/google_apps_calendar_create/1</helpurl>
+    <visible>true</visible>
+    <deferrable>false</deferrable>
+    <parameters>
+        <parameter id="title" label="Event Title" required="true"
+            tooltip="The title of the new calendar"/>
+        <parameter id="description" label="Description" required="false"
+            tooltip="A brief description of the new calendar"/>
+    </parameters>
+    <handler name="google_apps_calendar_create" version="2">
+        <infos>
+            <info name="refresh_token">&lt;%= @info['refresh_token'] %&gt;</info>
+            <info name="client_id">&lt;%= @info['client_id'] %&gt;</info>
+            <info name="client_secret">&lt;%= @info['client_secret'] %&gt;</info>
+            <info name="enable_debug_logging">&lt;%= @info['enable_debug_logging'] %&gt;</info>
+        </infos>
+        <parameters>
+            <parameter name="title">&lt;%= @parameters['title'] %&gt;</parameter>
+            <parameter name="description">&lt;%= @parameters['description'] %&gt;</parameter>
+        </parameters>
+    </handler>
+    <results format="xml"/>
+</taskDefinition>

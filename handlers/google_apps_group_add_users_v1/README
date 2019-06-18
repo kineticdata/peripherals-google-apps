@@ -1,0 +1,34 @@
+== GoogleApps_Group_AddUsers
+This handler adds a list of existing users to the specified group.
+
+=== Parameters
+[Group ID]
+  The id of the group that the specified users should be added to.  The group
+  id of the 'test.group@acme.com' group is 'test.group'.
+[Users]
+  A comma separated list of user ids or email addresses that correspond to 
+  users that should be added to the specified group.  The user id of 
+  'john.doe@acme.com' is 'john.doe'.
+
+=== Results
+This handler returns no results
+
+==== Sample Configuration
+Group ID:              'test.group'
+Users:                 'jane.user@acme.com,joe.user@acme.com'
+
+=== Detailed Description
+This handler uses the Google Provisioning API library to add new members
+to a previously created Google Group on your domain. A string of usernames
+are taken from the input (external accounts need the domain included in their
+username; iternal accounts do not) and then checked to see if they are valid
+usernames (can only check internal accounts). If there are no invalid usernames,
+the handler then adds these accounts to the group. Any errors that occur during
+the posting process will be caught and re-raised by this handler.
+
+* Provisioning API must be enabled. To do so, you must:
+  1. Log in to your admin account and select either the "Domain Settings" or 
+     "Users and groups" tab, depending on what control panel version you have.
+  2. Select the Settings tab.
+  3. Select the checkbox to enable the Provisioning API.
+  4. Save your changes.

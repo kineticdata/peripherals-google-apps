@@ -1,0 +1,56 @@
+== GoogleApps_Calendar_Create
+This handler creates a new calendar for the configured Google Calendar account.
+
+=== Parameters
+[Title]
+  The title of the new calendar.
+[Description]
+  A brief description of the new calendar.
+
+=== Results
+This handler returns no results.
+
+==== Sample Configuration
+Title:                   New Calendar
+Description:             Testing the create calendar handler
+
+=== Detailed Description
+This handler uses the Google API library to create a new secondary
+calendar in a Google Calendar account. The handler needs a refresh token and the 
+cooresponding client id and client secret to authenticate to successfully create
+the new calendar (information on how to retrieve can be found below). The 
+parameters are then slightly modified so that they work within Google's 
+API and then the new secondary calendar is created and posted to the given 
+account. Any errors that occur during the posting process will be caught and 
+re-raised by this handler.
+
+* In order to use this handler, the account specified by the task info
+values needs to enable Calendar API in admin account.
+
+==== How to retrieve the Client Id, Client Secret, and Refresh Token
+  To enable the Calendar API and get Client Id and Client Secret:
+      1. Navigate to the 'Google Developers Console'
+      2. Click on the Create Project button (or if you have an existing
+         project that you wish to keep using, click on the project name.)
+      3. Go to the APIs page and turn on the Calendar service
+      4. Go to the Credientials page and Create a new Client Id
+          * Select 'Installed Application' for the application type
+          * Select 'Other' for the Installed Application Type
+
+  To retrieve the Refresh Token for the account you want to post to
+      1. Put this url into your browser, while substiuting [:client_id] for
+         the client id of your application
+      * https://accounts.google.com/o/oauth2/auth?client_id=[:client_id]&redirect_uri=urn:ietf:wg:oauth:2.0:oob&scope=https://www.googleapis.com/auth/calendar&response_type=code&access_type=offline
+
+      2. Choose or add the account that you wish to connect the handler with
+      3. Click accept to give your application permission to modify the calendar
+      4. Copy and paste the success code that appears on the page
+      5. Send a post request to get the refresh token
+          * This can either done with Curl or with a browser extension like
+            Advanced REST Client in Chrome (A sample curl call is below)
+
+            POST URL = https://accounts.google.com/o/oauth2/token
+            POST Parameters: code=[:code]&client_id=[:client_id]&client_secret=[:client_secret]&redirect_uri=urn:ietf:wg:oauth:2.0:oob&grant_type=authorization_code
+
+            Sample Curl Call:
+              curl -- data "code=[:code]&client_id=[:client_id]&client_secret=[:client_secret]&redirect_uri=urn:ietf:wg:oauth:2.0:oob&grant_type=authorization_code" https://accounts.google.com/o/oauth2/token

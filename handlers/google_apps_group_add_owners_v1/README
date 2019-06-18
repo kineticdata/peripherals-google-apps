@@ -1,0 +1,36 @@
+== GoogleApps_Group_AddOwners
+This handler sets a list of existing users to be managers of the specified 
+group.
+
+=== Parameters
+[Group ID]
+  The id of the group that the specified users should be made managers of.  The
+  group id of the 'test.group@acme.com' group is 'test.group'.
+[Users]
+  A comma separated list of user ids or email addresses that correspond to 
+  users that should be made managers of the specified group.  The user id of 
+  'john.doe@acme.com' is 'john.doe'.
+
+=== Results
+This handler returns no results.
+
+==== Sample Configuration
+Group ID:              'test.group'
+Users:                 'olivia.owner@acme.com,owen.owner@acme.com'
+
+=== Detailed Description
+This handler uses the Google Provisioning API library to add new owners
+to a previously created Google Group on your domain. A string of usernames
+are taken from the input (external accounts need the domain included in their
+username; iternal accounts do not) and then checked to see if they are valid
+usernames (can only check internal accounts). If there are no invalid usernames,
+the handler then sets the specified accounts to be managers of the group. Any
+errors that occur during the posting process will be caught and re-raised by 
+this handler.
+
+* Provisioning API must be enabled. To do so, you must:
+  1. Log in to your admin account and select either the "Domain Settings" or 
+     "Users and groups" tab, depending on what control panel version you have.
+  2. Select the Settings tab.
+  3. Select the checkbox to enable the Provisioning API.
+  4. Save your changes.

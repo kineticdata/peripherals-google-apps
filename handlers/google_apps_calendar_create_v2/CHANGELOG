@@ -1,0 +1,7 @@
+GoogleApps_Calendar_Create_V1 (2012-08-07)
+* Initial version.  See README for details.
+
+Google_Apps_Calendar_Create_V2 (2014-06-03)
+* Changed handler to use a Refresh Token, which changes the info values to
+Client Id, Client Secret, and Refresh Token. Also adds 'id' as a results return
+value, updated Google API to v7.0.1.

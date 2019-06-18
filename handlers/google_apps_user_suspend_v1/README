@@ -1,0 +1,28 @@
+== GoogleApps_User_Suspend
+This handler suspends a user from your Google Apps database.  
+
+=== Parameters
+[Username]
+  The username of the user to be suspended.
+
+=== Results
+This handler returns no results.
+
+==== Sample Configuration
+Username:                'test.account'
+
+
+=== Detailed Description
+This handler uses the Google Provisioning API library to suspend a previously 
+created Google Account on your domain. As long as the inputted username is
+in the database, it will be suspended. If an account is already suspended,
+this call will just pass through and the account in question will continue
+to be suspended. Any errors that occur during the posting process will be 
+caught and re-raised by this handler.
+
+* Provisioning API must be enabled. To do so, you must:
+	1. Log in to your admin account and select either the "Domain Settings" or 
+	   "Users and groups" tab, depending on what control panel version you have.
+	2. Select the Settings tab.
+	3. Select the checkbox to enable the Provisioning API.
+	4. Save your changes.

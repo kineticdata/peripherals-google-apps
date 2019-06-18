@@ -1,0 +1,31 @@
+== GoogleApps_Group_RemoveUsers
+This handler removes a list of users from the specified group.
+
+=== Parameters
+[Group ID]
+  The id of the group that the specified users should be removed from.  The
+  group id of the 'test.group@acme.com' group is 'test.group'.
+[Users]
+  A comma separated list of user ids or email addresses that correspond to 
+  users that should be removed from the specified group.  The user id of 
+  'john.doe@acme.com' is 'john.doe'.
+
+=== Results
+This handler returns no results.
+
+==== Sample Configuration
+Group ID:              'test.group'
+Users:                 'jane.user@acme.com,joe.user@acme.com'
+
+=== Detailed Description
+This handler uses the Google Provisioning API library to remove the specified 
+users from a group.  If any of the provided users do not exist within the 
+group, they will be ignored.  Any errors that occur during the posting process 
+will be caught and re-raised by this handler.
+
+* Provisioning API must be enabled. To do so, you must:
+  1. Log in to your admin account and select either the "Domain Settings" or 
+     "Users and groups" tab, depending on what control panel version you have.
+  2. Select the Settings tab.
+  3. Select the checkbox to enable the Provisioning API.
+  4. Save your changes.

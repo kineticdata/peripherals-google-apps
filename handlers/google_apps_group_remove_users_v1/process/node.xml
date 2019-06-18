@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<taskDefinition id="google_apps_group_remove_users" name="Google Apps Group Remove Users" schema_version="1.0" version="1">
+    <author>support@kineticdata.com</author>
+    <description>This handler removes a list of users from the specified group.</description>
+    <helpurl>http://ktc.kineticdata.com/handler/google_apps_group_remove_users/1</helpurl>
+    <visible>true</visible>
+    <deferrable>false</deferrable>
+    <parameters>
+        <parameter id="group_id" label="Group ID" required="true"
+            tooltip="The id of the group that the specified users should be removed from.  The group id of the 'test.group@acme.com' group is 'test.group'."/>
+        <parameter id="users" label="Users" required="true"
+            tooltip="A comma separated list of user ids or email addresses that correspond to users that should be removed to the specified group.  The user id of 'john.doe@acme.com' is 'john.doe'."/>
+    </parameters>
+    <handler name="google_apps_group_remove_users" version="1">
+        <infos>
+            <info name="admin_email">&lt;%= @info['admin_email'] %&gt;</info>
+            <info name="admin_password">&lt;%= @info['admin_password'] %&gt;</info>
+            <info name="enable_debug_logging">&lt;%= @info['enable_debug_logging'] %&gt;</info>
+        </infos>
+        <parameters>
+            <parameter name="group_id">&lt;%= @parameters['group_id'] %&gt;</parameter>
+            <parameter name="users">&lt;%= @parameters['users'] %&gt;</parameter>
+        </parameters>
+    </handler>
+    <results format="xml"/>
+</taskDefinition>
