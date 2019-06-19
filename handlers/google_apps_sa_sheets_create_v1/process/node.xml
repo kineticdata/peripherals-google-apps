@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<taskDefinition id="google_apps_sa_sheets_create" name="Google Apps SA Sheets Create" schema_version="1.0" version="1">
+    <author>support@kineticdata.com</author>
+    <description>This handler creates a new Spreadsheet in Google Sheets.</description>
+    <helpurl>http://ktc.kineticdata.com/handler/google_apps_sa_sheets_create/1</helpurl>
+    <visible>true</visible>
+    <deferrable>false</deferrable>
+    <parameters>
+        <parameter id="name" label="Name" required="true" tooltip="Name for the new spreadsheet."/>
+    </parameters>
+    <handler name="google_apps_sa_sheets_create" version="1">
+        <infos>
+            <info name="service_account_key_json">&lt;%= @info['service_account_key_json'] %&gt;</info>
+            <info name="impersonated_username">&lt;%= @info['impersonated_username'] %&gt;</info>
+            <info name="enable_debug_logging">&lt;%= @info['enable_debug_logging'] %&gt;</info>
+        </infos>
+        <parameters>
+            <parameter name="name">&lt;%= @parameters['name'] %&gt;</parameter>
+        </parameters>
+    </handler>
+    <results format="xml">
+        <result name="Spreadsheet Id" />
+    </results>
+</taskDefinition>

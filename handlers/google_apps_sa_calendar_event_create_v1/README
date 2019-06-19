@@ -1,0 +1,93 @@
+== GoogleApps_SA_Calendar_EventCreate
+This handler creates a new Google Calendar event using a service account.
+
+=== Parameters
+[Name Type]
+  If using the default calendar choose 'Default', otherwise specify the 
+  calendar 'By Name'.
+[Calendar Name]
+  The name of the calendar this event will be added to.
+[Event Title]
+  The title of the new event.
+[Location]
+  The location of the new event.
+[Description]
+  A description for the new event.
+[Start Date]
+  The starting date for this event. The date format is YYYY-MM-DD.
+[Start Time]
+  The start time of the event. If this is an all-day event, leave this blank.
+  The time format is HH:MM:SS.
+[End Date]
+  The ending date for this event. The date format is YYYY-MM-DD.
+[End Time]
+  The end time of the event. If this is an all-day event, leave this 
+  blank. The time format is HH:MM:SS.
+[Attendees]
+  The email addresses of people who are being invited to this event,
+  separated by commas.
+[Send Notifications]
+  Specifies whether the specified attendees should receive email notification
+  of their invitation.
+
+=== Results
+This handler returns no results.
+
+==== Sample Configuration
+Calendar Name:           Example Calendar
+Event Title:             New Event
+Location:                Somewhere Out There
+Description:             This is a test event
+Start Date:              2012-06-15
+Start Time:              13:00:00
+End Date:                2012-06-15
+End Time:                15:00:00
+Attendees:               test.account1@gmail.com, test.account2@gmail.com
+Send Notifications:      Yes
+
+=== Detailed Description
+This handler uses the Google API library to create a new Event and then 
+inserts it into your calendar. Using a Service Account Email and the
+corresponding P12 file (see below for details about obtaining these values) to
+authenticate the handler against Google's API. The parameters
+are then slightly modified so that they work within Google's API and 
+then the new event is posted to the calendar of your choice. Any errors 
+that occur during the posting process will be caught and re-raised by 
+this handler.
+
+==== How to retrieve the Service Account Email and Setup P12 File
+  To enable the Calendar API and get the Service Account Email and P12 File
+    1. Navigate to the 'Google Developers Console'
+    2. Click on the Create Project button (or if you have an existing project
+       that you wish to keep using, click on the project name.)
+    3. Go to the APIs page and turn on the Calendar service
+    4. Go to the Credentials page and Create a new Client Id
+        * Select 'Service Account'
+        * Select 'P12 Key' for Key type
+    5. When you click 'Create Client Id', a P12 File will be downloaded
+    6. Remember the Email for the Service Account that you just created
+
+  To add the P12 file to the handler:
+    1. Download the .zip file for the handler
+    2. Expand the zipped directory, and place the P12 File that you just
+       downloaded into the resources folder
+        * Found at google_apps_calendar_create_v3 => handler => resources
+        * Remember the name of the P12 File, it will be needed later
+    3. Zip the directory back up and upload to Kinetic Task
+
+  The Service Account Email and P12 File name will be used as info values for 
+  the handler, and will be used to get access to the Google Services
+
+=== How to Perform Domain-Wide Delegation of Authority to Allow Impersonation
+  1. Go to your Google Apps domain’s Admin console.
+  2. Select Security from the list of controls. If you don't see Security listed, 
+     select More controls from the gray bar at the bottom of the page, then 
+     select Security from the list of controls.
+  3. Select Advanced settings from the list of options.
+  4. Select Manage third party OAuth Client access in the Authentication section.
+  5. In the Client name field enter the service account's Client ID.
+  6. In the One or More API Scopes field enter the list of scopes that your 
+     application should be granted access to (see image below). For example if 
+     you need domain-wide access to the Google Calendar API enter: 
+     * https://www.googleapis.com/auth/calendar
+  7. Click the Authorize button.

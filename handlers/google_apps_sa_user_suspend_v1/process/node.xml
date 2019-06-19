@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<taskDefinition id="google_apps_sa_user_suspend" name="Google Apps SA User Suspend" schema_version="1.0" version="1">
+    <author>support@kineticdata.com</author>
+    <description>This handler suspends a user from the domain database using a service account.</description>
+    <helpurl>http://ktc.kineticdata.com/handler/google_apps_user_suspend/1</helpurl>
+    <visible>true</visible>
+    <deferrable>false</deferrable>
+    <parameters>
+        <parameter id="email" label="Email" required="true"
+            tooltip="The email of the user to be suspended."/>
+    </parameters>
+    <handler name="google_apps_sa_user_suspend" version="1">
+        <infos>
+            <info name="service_account_email">&lt;%= @info['service_account_email'] %&gt;</info>
+            <info name="p12_file_name">&lt;%= @info['p12_file_name'] %&gt;</info>
+            <info name="impersonated_username">&lt;%= @info['impersonated_username'] %&gt;</info>
+            <info name="enable_debug_logging">&lt;%= @info['enable_debug_logging'] %&gt;</info>
+        </infos>
+        <parameters>
+            <parameter name="email">&lt;%= @parameters['email'] %&gt;</parameter>
+        </parameters>
+    </handler>
+    <results format="xml"/>
+</taskDefinition>

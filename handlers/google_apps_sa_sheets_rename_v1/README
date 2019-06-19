@@ -1,0 +1,91 @@
+== GoogleApps_SA_Sheets_Rename
+This handler renames a Spreadsheet in Google Sheets.
+
+=== Parameters
+[Spreadsheet Id]
+  Id of the spreadsheet to rename.
+[New Name]
+  New name for the spreadsheet
+
+=== Results
+This handler returns no results.
+
+==== Sample Configuration
+Spreadsheet Id:        1xyao84fV2LyU1svyx48KTSbBgiq_mPr2w142bbZce8g
+Name:                  Updated Spreadsheet Name
+
+=== Detailed Description
+This handler uses the Google Sheets API ruby library to update a Google Sheets
+spreadsheet name. Before using this handler, a valid Service Account must be 
+created/used and the Google Sheets API needs to be enabled (see below for
+details on how to do this). Using the contents of a Google Service Account JSON 
+key to authenticate against Google's API, the handler takes a spreadsheet id and
+name and updates the spreadsheet with this name (If you don't already have the
+spreadsheet id, it can be found in the URL when editing a spreadsheet in the
+browser - between the /d/ and /edit.)
+ie. For the url - https://docs.google.com/spreadsheets/d/1xyao84fV2LyU1svyx48KTSbBgiq_mPr2w142bbZce8g/edit#gid=0
+- the id is: 1xyao84fV2LyU1svyx48KTSbBgiq_mPr2w142bbZce8g
+
+
+==== service_account_key_json Info Value
+To authenticate with Google, the handler uses the contents to the Service Account
+JSON key to authenticate against Google. When the handler has been uploaded to
+Kinetic Task, open up the JSON key that was downloaded from Google (instructions
+below if needed) and copy the contents of it into the service_account_key_json
+info value (copy everything, including the beginning and ending JSON braces {}).
+
+==== Creating a Service Account
+  1. Navigate to the 'Google Developers Console'
+    - Located at https://console.developers.google.com
+    - If the URL has changed, try googling 'Google API Developer Console' to either
+      find the console or find Google's current documentation for how to create
+      an API project
+  2. Create a new API Project
+    - If you have an existing project, navigate to that project page if you
+      aren't already there by default
+  3. Navigate to Credentials
+  4. Create a new Credential of the type 'Service Account'
+    - When creating the Service Account, choose a 'Key type' of JSON
+  5. Make note of where the JSON key was downloaded on creation. It will be
+     needed for authentication later.
+
+==== Enabling the Google Sheets API
+  1. In the Google Developers Console, navigate to the Library section
+  2. Find the Google Sheets API and click on the link
+  3. Find 'Enable' at the top of the page and click it to enable the API
+
+==== Allowing an Impersonated User to Authenticate with the Service Account
+NOTE: To allow an impersonated user to authenticate with a service account, a
+process called 'Domain-Wide Delegation of Authority' must be enacted by a Google
+Apps account admin to allow a Service Account to impersonate users.
+  1. Go to your Google Apps domain’s Admin console.
+  2. Go to the 'Security' page. 
+  3. Select 'Advanced settings' from the list of options. If it isn't on the
+     page originally, click 'Show More' at the bottom of the page.
+  4. Select 'Manage API client access' in the Authentication section.
+  5. Using the Client Id associated with your service account, attach 'One or
+     More API scopes' for the services that you want the Service Account to have
+     access to.
+    - API Scope(s) needed for this handler: 
+      - https://www.googleapis.com/auth/drive
+      OR
+      - https://www.googleapis.com/auth/spreadsheets
+    - If you don't have a Client Id associated with your Service Account (should
+      see it under 'OAuth 2.0 client IDs' on the Credentials page), see the
+      section below for setting that up
+    - If they aren't explicity added in every time the scope list is updated, 
+      any scopes that have been previously setup will be removed.
+      - If you have a Client Id that already has domain wide calendar scope,
+      to add the spreadsheets scope without losing the Calendar scope you need
+      to add the Calendar scope to the comma separated list of scopes to add
+        - https://www.googleapis.com/auth/calendar
+        CHANGES TO
+        - https://www.googleapis.com/auth/spreadsheets,https://www.googleapis.com/auth/calendar
+
+==== Creating a Client ID for a Service Account
+  1. In the Google Developers Console, navigate to the Credentials section
+  2. Navigate to Manage Service Accounts
+  3. Edit the Service Account you want to give a Client ID to
+  4. Select 'Enable G Suite Domain-Wide Delegation'
+  5. Back on the Credentials page, the Service Account will now be associated
+     with a Client ID

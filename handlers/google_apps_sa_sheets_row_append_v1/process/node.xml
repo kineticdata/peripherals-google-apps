@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<taskDefinition id="google_apps_sa_sheets_row_append" name="Google Apps SA Sheets Row Append" schema_version="1.0" version="1">
+    <author>support@kineticdata.com</author>
+    <description>This handler adds a row to the bottom of a Spreadsheet in Google Sheets.</description>
+    <helpurl>http://ktc.kineticdata.com/handler/google_apps_sa_sheets_row_append/1</helpurl>
+    <visible>true</visible>
+    <deferrable>false</deferrable>
+    <parameters>
+        <parameter id="sheet_id" label="Sheet Id" required="true" 
+            tooltip="Id of the spreadsheet to add values to."/>
+        <parameter id="worksheet_name" label="Worksheet Name" required="true"
+            tooltip="Name of the worksheet (inside the selected spreadsheet) to add the values to">Sheet1</parameter>
+        <parameter id="values" label="Values (Comma Separated)" required="true" 
+            tooltip="A comma separated list of values to add to the bottom of the worksheet."/>
+    </parameters>
+    <handler name="google_apps_sa_sheets_row_append" version="1">
+        <infos>
+            <info name="service_account_key_json">&lt;%= @info['service_account_key_json'] %&gt;</info>
+            <info name="impersonated_username">&lt;%= @info['impersonated_username'] %&gt;</info>
+            <info name="enable_debug_logging">&lt;%= @info['enable_debug_logging'] %&gt;</info>
+        </infos>
+        <parameters>
+            <parameter name="sheet_id">&lt;%= @parameters['sheet_id'] %&gt;</parameter>
+            <parameter name="worksheet_name">&lt;%= @parameters['worksheet_name'] %&gt;</parameter>
+            <parameter name="values">&lt;%= @parameters['values'] %&gt;</parameter>
+        </parameters>
+    </handler>
+    <results format="xml"/>
+</taskDefinition>

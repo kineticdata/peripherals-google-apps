@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<taskDefinition id="google_apps_sa_group_add_owners" name="Google Apps SA Group Add Owners" schema_version="1.0" version="1">
+    <author>support@kineticdata.com</author>
+    <description>This handler sets a list of existing users to be managers of the specified group using a service account.</description>
+    <helpurl>http://ktc.kineticdata.com/handler/google_apps_group_add_owners/1</helpurl>
+    <visible>true</visible>
+    <deferrable>false</deferrable>
+    <parameters>
+        <parameter id="group_id" label="Group ID" required="true"
+            tooltip="The id of the group that the specified users should be made managers of.  The group id of the 'test.group@acme.com' group is 'test.group'."/>
+        <parameter id="users" label="Users" required="false"
+            tooltip="A comma separated list of user ids or email addresses that correspond to users that should be made managers of the specified group.  The user id of 'john.doe@acme.com' is 'john.doe'."/>
+    </parameters>
+    <handler name="google_apps_sa_group_add_owners" version="1">
+        <infos>
+            <info name="service_account_email">&lt;%= @info['service_account_email'] %&gt;</info>
+            <info name="p12_file_name">&lt;%= @info['p12_file_name'] %&gt;</info>
+            <info name="impersonated_username">&lt;%= @info['impersonated_username'] %&gt;</info>
+            <info name="enable_debug_logging">&lt;%= @info['enable_debug_logging'] %&gt;</info>
+        </infos>
+        <parameters>
+            <parameter name="group_id">&lt;%= @parameters['group_id'] %&gt;</parameter>
+            <parameter name="users">&lt;%= @parameters['users'] %&gt;</parameter>
+        </parameters>
+    </handler>
+    <results format="xml"/>
+</taskDefinition>

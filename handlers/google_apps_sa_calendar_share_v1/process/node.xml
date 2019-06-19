@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<taskDefinition id="google_apps_sa_calendar_share" name="Google Apps SA Calendar Share" schema_version="1.0" version="1">
+    <author>support@kineticdata.com</author>
+    <description>This handler shares a Google Calendar using a service account.</description>
+    <helpurl>http://ktc.kineticdata.com/handler/google_apps_calendar_share/1</helpurl>
+    <visible>true</visible>
+    <deferrable>false</deferrable>
+    <parameters>
+        <parameter id="calendar_name" label="Calendar Name" required="true"
+            tooltip="The name of the calendar that will be shared." />
+        <parameter id="scope" label="Sharing Scope" required="true"
+            tooltip="The scope for who the calendar will be shared with. The scope will default to public access, but you can also limit it to user, group, or domain." />
+        <parameter id="recipient" label="Recipient" required="false"
+            tooltip="If the scope is not public, the username, group name or domain name for who the calendar will be shared with." />
+        <parameter id="calendar_access" label="Calendar Access" required="true"
+            tooltip="The access type that the recipient will have to the calendar." />
+    </parameters>
+    <handler name="google_apps_sa_calendar_share" version="1">
+        <infos>
+            <info name="service_account_email">&lt;%= @info['service_account_email'] %&gt;</info>
+            <info name="p12_file_name">&lt;%= @info['p12_file_name'] %&gt;</info>
+            <info name="impersonated_username">&lt;%= @info['impersonated_username'] %&gt;</info>
+            <info name="enable_debug_logging">&lt;%= @info['enable_debug_logging'] %&gt;</info>
+        </infos>
+        <parameters>
+            <parameter name="calendar_name">&lt;%= @parameters['calendar_name'] %&gt;</parameter>
+            <parameter name="scope">&lt;%= @parameters['scope'] %&gt;</parameter>
+            <parameter name="recipient">&lt;%= @parameters['recipient'] %&gt;</parameter>
+            <parameter name="calendar_access">&lt;%= @parameters['calendar_access'] %&gt;</parameter>
+        </parameters>
+    </handler>
+    <results format="xml"/>
+</taskDefinition>

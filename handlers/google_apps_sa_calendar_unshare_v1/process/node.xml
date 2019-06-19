@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<taskDefinition id="google_apps_sa_calendar_unshare" name="Google Apps SA Calendar Unshare" schema_version="1.0" version="1">
+    <author>support@kineticdata.com</author>
+    <description>This handler unshares a Google Calendar using a service account.</description>
+    <helpurl>http://ktc.kineticdata.com/handler/google_apps_calendar_unshare/1</helpurl>
+    <visible>true</visible>
+    <deferrable>false</deferrable>
+    <parameters>
+        <parameter id="calendar_name" label="Calendar Name" required="true"
+            tooltip="The name of the calendar that will be unshared." />
+        <parameter id="unshare_location" label="Unshare Location" required="true"
+            tooltip="The location that the calendar will be unshared from. If the calendar is currently public, the location is 'default'." />
+    </parameters>
+    <handler name="google_apps_sa_calendar_unshare" version="1">
+        <infos>
+            <info name="service_account_email">&lt;%= @info['service_account_email'] %&gt;</info>
+            <info name="p12_file_name">&lt;%= @info['p12_file_name'] %&gt;</info>
+            <info name="impersonated_username">&lt;%= @info['impersonated_username'] %&gt;</info>
+            <info name="enable_debug_logging">&lt;%= @info['enable_debug_logging'] %&gt;</info>
+        </infos>
+        <parameters>
+            <parameter name="calendar_name">&lt;%= @parameters['calendar_name'] %&gt;</parameter>
+            <parameter name="unshare_location">&lt;%= @parameters['unshare_location'] %&gt;</parameter>
+        </parameters>
+    </handler>
+    <results format="xml"/>
+</taskDefinition>

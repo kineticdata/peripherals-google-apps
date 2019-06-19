@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<taskDefinition id="google_apps_sa_sheets_rename" name="Google Apps SA Sheets Rename" schema_version="1.0" version="1">
+    <author>support@kineticdata.com</author>
+    <description>This handler renames a Spreadsheet in Google Sheets.</description>
+    <helpurl>http://ktc.kineticdata.com/handler/google_apps_sa_sheets_rename/1</helpurl>
+    <visible>true</visible>
+    <deferrable>false</deferrable>
+    <parameters>
+        <parameter id="sheet_id" label="Sheet Id" required="true" tooltip="Id of the spreadsheet to rename."/>
+        <parameter id="new_name" label="New Name" required="true" tooltip="New name of the spreadsheet."/>
+    </parameters>
+    <handler name="google_apps_sa_sheets_rename" version="1">
+        <infos>
+            <info name="service_account_key_json">&lt;%= @info['service_account_key_json'] %&gt;</info>
+            <info name="impersonated_username">&lt;%= @info['impersonated_username'] %&gt;</info>
+            <info name="enable_debug_logging">&lt;%= @info['enable_debug_logging'] %&gt;</info>
+        </infos>
+        <parameters>
+            <parameter name="sheet_id">&lt;%= @parameters['sheet_id'] %&gt;</parameter>
+            <parameter name="new_name">&lt;%= @parameters['new_name'] %&gt;</parameter>
+        </parameters>
+    </handler>
+    <results format="xml"/>
+</taskDefinition>

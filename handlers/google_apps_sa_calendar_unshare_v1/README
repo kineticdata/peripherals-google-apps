@@ -1,0 +1,66 @@
+== GoogleApps_SA_Calendar_Unshare
+This handler unshares a Google Calendar using a service account.
+
+=== Parameters
+[Calendar Name]
+  The name of the calendar that will be unshared.
+[Unshare Location]
+  The location that the calendar will be unshared from. If the calendar is
+  currently public, the location is 'default'.  
+
+=== Results
+This handler returns no results.
+
+==== Sample Configuration
+Calendar Name:          Example Calendar   
+Unshare Address:        test.user@acme.com
+
+=== Detailed Description
+This handler uses the Google API library to unshare a Google Calendar that has
+been previously shared. Using a Service Account Email and the corresponding P12 
+file (see below for details about obtaining these values) to authenticate the 
+handler against Google's API. A call is then made to exchange the Calendar Name
+for a unique Calendar Id. Then another call will be made to Google to find the
+ACL Id of the calendar (the rule that says who the calendar can be shared to) so
+that it can then be deleted. Any errors that occur during the posting process will
+be caught and re-raised by this handler.
+
+* In order to use this handler, the account specified by the task info
+values needs to enable Calendar API in admin account.
+
+==== How to retrieve the Service Account Email and Setup P12 File
+  To enable the Calendar API and get the Service Account Email and P12 File
+    1. Navigate to the 'Google Developers Console'
+    2. Click on the Create Project button (or if you have an existing project
+       that you wish to keep using, click on the project name.)
+    3. Go to the APIs page and turn on the Calendar service
+    4. Go to the Credentials page and Create a new Client Id
+        * Select 'Service Account'
+        * Select 'P12 Key' for Key type
+    5. When you click 'Create Client Id', a P12 File will be downloaded
+    6. Remember the Email for the Service Account that you just created
+
+  To add the P12 file to the handler:
+    1. Download the .zip file for the handler
+    2. Expand the zipped directory, and place the P12 File that you just
+       downloaded into the resources folder
+        * Found at google_apps_calendar_create_v3 => handler => resources
+        * Remember the name of the P12 File, it will be needed later
+    3. Zip the directory back up and upload to Kinetic Task
+
+  The Service Account Email and P12 File name will be used as info values for 
+  the handler, and will be used to get access to the Google Services
+
+=== How to Perform Domain-Wide Delegation of Authority to Allow Impersonation
+  1. Go to your Google Apps domain’s Admin console.
+  2. Select Security from the list of controls. If you don't see Security listed, 
+     select More controls from the gray bar at the bottom of the page, then 
+     select Security from the list of controls.
+  3. Select Advanced settings from the list of options.
+  4. Select Manage third party OAuth Client access in the Authentication section.
+  5. In the Client name field enter the service account's Client ID.
+  6. In the One or More API Scopes field enter the list of scopes that your 
+     application should be granted access to (see image below). For example if 
+     you need domain-wide access to the Google Calendar API enter: 
+     * https://www.googleapis.com/auth/calendar
+  7. Click the Authorize button.

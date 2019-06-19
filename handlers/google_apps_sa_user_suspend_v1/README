@@ -1,0 +1,61 @@
+== GoogleApps_SA_User_Suspend
+This handler suspends a user from your Google Apps database using a service 
+account.
+
+=== Parameters
+[Username]
+  The username of the user to be suspended.
+
+=== Results
+This handler returns no results.
+
+==== Sample Configuration
+Username:                'test.account'
+
+=== Detailed Description
+This handler uses the Google Admin SDK API library to suspend a previously 
+created Google Account on your domain. As long as the inputted username is
+in the database, it will be suspended. If an account is already suspended,
+this call will just pass through and the account in question will continue
+to be suspended. Any errors that occur during the posting process will be 
+caught and re-raised by this handler.
+
+* In order to use this handler, the account specified by the task info
+values needs to enable Admin SDK API in admin account.
+
+==== How to retrieve the Service Account Email and Setup P12 File
+  To enable the Calendar API and get the Service Account Email and P12 File
+    1. Navigate to the 'Google Developers Console'
+    2. Click on the Create Project button (or if you have an existing project
+       that you wish to keep using, click on the project name.)
+    3. Go to the APIs page and turn on the Calendar service
+    4. Go to the Credentials page and Create a new Client Id
+        * Select 'Service Account'
+        * Select 'P12 Key' for Key type
+    5. When you click 'Create Client Id', a P12 File will be downloaded
+    6. Remember the Email for the Service Account that you just created
+
+  To add the P12 file to the handler:
+    1. Download the .zip file for the handler
+    2. Expand the zipped directory, and place the P12 File that you just
+       downloaded into the resources folder
+        * Found at google_apps_calendar_create_v3 => handler => resources
+        * Remember the name of the P12 File, it will be needed later
+    3. Zip the directory back up and upload to Kinetic Task
+
+  The Service Account Email and P12 File name will be used as info values for 
+  the handler, and will be used to get access to the Google Services
+
+=== How to Perform Domain-Wide Delegation of Authority to Allow Impersonation
+  1. Go to your Google Apps domain’s Admin console.
+  2. Select Security from the list of controls. If you don't see Security listed, 
+     select More controls from the gray bar at the bottom of the page, then 
+     select Security from the list of controls.
+  3. Select Advanced settings from the list of options.
+  4. Select Manage third party OAuth Client access in the Authentication section.
+  5. In the Client name field enter the service account's Client ID.
+  6. In the One or More API Scopes field enter the list of scopes that your 
+     application should be granted access to (see image below). For example if 
+     you need domain-wide access to the Google Directory API enter: 
+     * https://www.googleapis.com/auth/admin.directory.user, https://www.googleapis.com/auth/admin.directory.group
+  7. Click the Authorize button.
