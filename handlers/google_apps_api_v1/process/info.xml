@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<taskInfo version="1.0">
+  <info name="service_account" description="The email address of the service account."></info>
+  <info name="private_key" description="Private Key" type="encrypted"></info>
+  <info name="enable_debug_logging" description="True or False">false</info>
+</taskInfo>
