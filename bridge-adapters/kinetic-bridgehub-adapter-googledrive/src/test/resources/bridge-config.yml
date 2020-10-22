@@ -1,0 +1,65 @@
+# Values used for the bridge configuration using a key value pair of Configuration Label: Value
+# ie. For the property with a label of Username, the configuration will be Username: "test.user"
+# Do this for all of the configuration values
+Bridge Configuration:
+    Service Account Email: "kinetic-integrator@service-account-test-283918.iam.gserviceaccount.com"
+#    Select Security Type: "Private Key"
+#    Private Key: "-----BEGIN PRIVATE KEY-----
+#MIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQCZ7VJdnuZR2w5P
+#OS0ys8WA47SMsLRZ6MC3EoYUCKWcJ4mj8gAJU8uCt6sqPP9uNmLG/euJZnrwesfL
+#9wHz8tyMI0lCJC+jIx7lmdoQ7u/c8lTbcSgGtJygQFHl1rZiPpqBN7D6HXWz8V2y
+#a/r+RDmNBNDS58Pv/IIJntsYcgUZ6pR2YvscMcDooRs9V+l51nouWcpzKBmvdK73
+#4cTYhvn1+i5cBxtojGYsGO/fZ2uwUHgY0YtO8yq/jzDkwSvkGU+faDgtqFnUBUft
+#50yggC4EgLQj9t6+ogSDXmS9nESxYk5q+THPlZexIXiNxLF0UkW7vEbSx3MnYy5+
+#pBYO1WCLAgMBAAECggEAIG0cQtiskGXjN9FFsj6oxqQxbsny1FXx8x8V27aOnLy/
+#hCgA1fYvExR6HGXJMYCHgoAPVFygXXSgDlm0sZ1h1KvCTQqudmF5qsikZZjQMu1h
+#7vCBjBgUPrYOCqsWtM+XYM1InQgDuaqJIIMa1uGsdgajrypf3niFNF2grh+m73Rl
+#m3e7bBum2cLH50ILssbgdM5npEl39asrJzyWJDn4UczJagwsldGdu091SAiJi8qu
+#tDPbJGvdGss4eCf+KbyyuqIxCAyS5K/c7ST2g73yDDXwoIGDoh4E8JzAai2o53Dy
+#XQGxjekFQh2QiTdZe0khBf85GoQbkfzHI79BQ8dDYQKBgQDRncfqGP4QZ56ZCzEX
+#ERmTQ1U7hb138umaZ51WOgB/Ad1qpUxq4Ff9XyoNdV+G8M7ocZBFpuRTsCsUba04
+#CGmhaw7e/ZWsi/KVCY3EyExhz+2ZEEKKOCKLtfftKC3jAIygWLkkAjrJ0rzveWrR
+#vA4Xh6EOSVUvP6KVaiwaZ7CaqQKBgQC7/OMuUBjSaSu3cyBG8/uNqNd0SY2PxB/2
+#cVfNW2+WqRr2PuCKvgMFIpQDsGwRnX6fSXSvO7aMeCasqhlJdMIta2dV9PddVtsm
+#80wTMrgVvh/UPFjpioJ0yREm3mnpSpfcwzhnaFxXEDha0dJ2Yrx6w4w8jAUVnvwG
+#XFUtn/B2EwKBgQDMvRvi335ob41NVs0gBqfAWugJN1wUqMLa+ZGIAycw5pVp8QJu
+#8al/5U+hzZ78ooC2MRYFsjkaNNwfG/Ew5aam73aa/30OB7NtNuOt7SYN85XTBzq2
+#3pV/eMEsdy46pvK0O3S6YyMgtiGslh9rtA7flK4O0jnN6I3Y+tcRA25P4QKBgQC3
+#VFuVqeVbJdfNc0fyCjSzpQphTO3yW7k0FLsk+Vvs2QQDS7SdecrmMh+ZLW9nCmoX
+#G4Lg9eIEQZSt5MD+YxCPTOQc7uZiL7dP2AvD2T2vbpgJ2cR4FW0+SWwhtNwi+Gz7
+#jaMvLZaIDbh30ZJng8j+DEByN7cpq79q0Jb9BLJz4wKBgQCCODa6TTr2fUtMHFAS
+#opLjXFJzM1XFl+cYAGeaCfi0IV1ENV2jX+XuZxZh1DXdSLTHR+p/xuRq2ZgX3R2q
+#H3NUp0izmcccRxg95fHljNX4Om+J8lBuLSmQQ99vTWHuxz1V/e0OBlqLsbLLhDrr
+#TP62zYhLwBIKTVg9+3VQQmc1Lw==
+#-----END PRIVATE KEY-----"
+    Select Security Type: "P12 File"
+    P12 File Location: "/Users/chadrehm/service-account-test-283918-980f56a07733.p12"
+    Impersonated User Email: "chad.rehm@kineticdata.com"
+    Google Apps Expiration Script Url: ""
+
+# Setting the different request configurations for the Standard Bridgehub tests
+    # Structure: Structure string
+    # Fields: At least two comma separated fields related to the structure
+        # NOTE: If order is supported, the first two fields in the string must be sortable
+    # Empty Value Query: A bridge query that NEVER returns any values
+    # Single Value Query: A bridge query that ALWAYS return one value
+    # Multiple Value Query: A bridge query that returns multiple values
+Test Request Configuration:
+    Structure: ""
+    Fields: ""
+    Empty Value Query: ""
+    Single Value Query: ""
+    Multiple Value Query: ""
+
+# Configuration of the various metadata options
+    # Pagination Type: Possible values (string) - offset,token,none
+        # offset: If the bridge uses a pageNumber,pageSize, and offset to handle pagination
+        # token: If the bridges uses a nextPageToken to handle pagination
+        # none: If the bridge doesn't support pagination, pagination tests are ignored
+    # Order Supported: Possible values (string) - true,false
+        # true: If order is supported, make sure that the first two fields in the
+        #       Test Request Configuration are sortable fields
+        # false: If the bridge doesn't support ordering, the order tests are ignored
+Metadata Configuration:
+    Pagination Type: "none"
+    Order Supported: "false"
