@@ -75,7 +75,7 @@ public class GoogleDriveAdapter implements BridgeAdapter {
     /** Defines the collection of property names for the adapter */
     public static class Properties {
         public static final String PROPERTY_EMAIL = "Service Account Email";
-        public static final String SECURITY_TYPE = "Select Security Type";
+        public static final String AUTHORIZATION_TYPE = "Authorization Type";
         public static final String P12_FILE = "P12 File Location";
         public static final String PRIVATE_KEY = "Private Key";
         public static final String PROPERTY_USER_IMPERSONATION = "Impersonated User Email";
@@ -84,14 +84,14 @@ public class GoogleDriveAdapter implements BridgeAdapter {
     
     private final ConfigurablePropertyMap properties = new ConfigurablePropertyMap(
         new ConfigurableProperty(Properties.PROPERTY_EMAIL).setIsRequired(true),
-        new ConfigurableProperty(Properties.SECURITY_TYPE)
+        new ConfigurableProperty(Properties.AUTHORIZATION_TYPE)
             .setIsRequired(true)
             .setPossibleValues("P12 File", "Private Key")
             .setValue("P12 File"),
         new ConfigurableProperty(Properties.P12_FILE)
-            .setDependency(Properties.SECURITY_TYPE, "P12 File"),
+            .setDependency(Properties.AUTHORIZATION_TYPE, "P12 File"),
         new ConfigurableProperty(Properties.PRIVATE_KEY)
-            .setDependency(Properties.SECURITY_TYPE, "Private Key"),
+            .setDependency(Properties.AUTHORIZATION_TYPE, "Private Key"),
         new ConfigurableProperty(Properties.PROPERTY_USER_IMPERSONATION).setIsRequired(true),            
         new ConfigurableProperty(Properties.PROPERTY_EXPIRATION_SCRIPT)
     );
@@ -116,7 +116,7 @@ public class GoogleDriveAdapter implements BridgeAdapter {
         this.impersonatedUser = properties.getValue(Properties.PROPERTY_USER_IMPERSONATION);
         this.prevTokenMap = new HashMap<String,Map>();
         this.expirationScript = properties.getValue(Properties.PROPERTY_EXPIRATION_SCRIPT);
-        String securityType = properties.getValue(Properties.SECURITY_TYPE);
+        String authorizationType = properties.getValue(Properties.AUTHORIZATION_TYPE);
         
         JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
         HttpTransport httpTransport;
@@ -127,7 +127,7 @@ public class GoogleDriveAdapter implements BridgeAdapter {
             scopes.add(DriveScopes.DRIVE);
             
             // P12 File is supported for backwards compatibility
-            if (securityType.equals("P12 File")) {
+            if (authorizationType.equals("P12 File")) {
                 credential = new GoogleCredential.Builder()
                     .setTransport(httpTransport)
                     .setJsonFactory(JSON_FACTORY)

@@ -8,7 +8,7 @@ Bridge Configuration:
 #    Authorization Type: "P12 File"
 #    P12 File Location: ""
     Impersonated User Email: ""
-    Google Apps Expiration Script Url: ""
+    Domain: ""
 
 # Setting the different request configurations for the Standard Bridgehub tests
     # Structure: Structure string

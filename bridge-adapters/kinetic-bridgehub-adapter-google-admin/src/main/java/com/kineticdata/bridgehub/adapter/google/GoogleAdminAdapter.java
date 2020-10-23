@@ -24,8 +24,16 @@ import com.google.api.services.admin.directory.DirectoryScopes;
 import com.google.api.services.admin.directory.model.*;
 import com.google.api.services.admin.directory.Directory;
 import com.kineticdata.bridgehub.adapter.BridgeUtils;
+import java.io.BufferedReader;
+import java.io.StringReader;
 import java.security.GeneralSecurityException;
+import java.security.KeyFactory;
+import java.security.PrivateKey;
+import java.security.spec.PKCS8EncodedKeySpec;
+import java.util.Base64;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.LoggerFactory;
 
@@ -59,24 +67,35 @@ public class GoogleAdminAdapter implements BridgeAdapter {
     
     /** Defines the collection of property names for the adapter. */
     public static class Properties {
-        public static final String EMAIL = "Service Account Email";
+        public static final String EMAIL = "Service Account Email";        
+        public static final String AUTHORIZATION_TYPE = "Authorization Type";
         public static final String P12_FILE = "P12 File Location";
+        public static final String PRIVATE_KEY = "Private Key";
         public static final String USER_IMPERSONATION = "Impersonated User Email";
         public static final String DOMAIN = "Domain";
     }
 
     private String email;
-    private String p12File;
+    private String p12Location;
+    private String privateKeyString;
     private String userImpersonation;
     private String domain;
     private Directory directory;
 
     private final ConfigurablePropertyMap properties = new ConfigurablePropertyMap(
-            new ConfigurableProperty(Properties.EMAIL).setIsRequired(true),
-            new ConfigurableProperty(Properties.P12_FILE).setIsRequired(true),
-            new ConfigurableProperty(Properties.USER_IMPERSONATION).setIsRequired(true),
-            new ConfigurableProperty(Properties.DOMAIN).setIsRequired(false).setDescription("Optionally set the domain where "
-                    + "the bridge will query. The domain can also be set in each individual bridge query if it isn't set here.")
+        new ConfigurableProperty(Properties.EMAIL).setIsRequired(true),
+        new ConfigurableProperty(Properties.AUTHORIZATION_TYPE)
+            .setIsRequired(true)
+            .setPossibleValues("P12 File", "Private Key")
+            .setValue("P12 File"),
+        new ConfigurableProperty(Properties.P12_FILE)
+            .setDependency(Properties.AUTHORIZATION_TYPE, "P12 File"),
+        new ConfigurableProperty(Properties.PRIVATE_KEY)
+            .setDependency(Properties.AUTHORIZATION_TYPE, "Private Key"),
+        new ConfigurableProperty(Properties.USER_IMPERSONATION).setIsRequired(true),
+        new ConfigurableProperty(Properties.DOMAIN).setIsRequired(false)
+            .setDescription("Optionally set the domain where the bridge will query. "
+                + "The domain can also be set in each individual bridge query if it isn't set here.")
     );
     
     /**
@@ -112,13 +131,14 @@ public class GoogleAdminAdapter implements BridgeAdapter {
     @Override
     public void initialize() throws BridgeError {
         this.email = properties.getValue(Properties.EMAIL);
-        this.p12File = properties.getValue(Properties.P12_FILE);
+        this.p12Location = properties.getValue(Properties.P12_FILE);
+        this.privateKeyString = properties.getValue(Properties.PRIVATE_KEY);
         this.userImpersonation = properties.getValue(Properties.USER_IMPERSONATION);
         this.domain = properties.getValue(Properties.DOMAIN);
         this.directory = setBridge();
     }
     
-      /*---------------------------------------------------------------------------------------------
+    /*---------------------------------------------------------------------------------------------
      * CONSTRUCTOR
      *-------------------------------------------------------------------------------------------*/
     
@@ -131,6 +151,7 @@ public class GoogleAdminAdapter implements BridgeAdapter {
      * added void to fix error-C
      */
     public Directory setBridge() throws BridgeError {
+        String authorizationType = properties.getValue(Properties.AUTHORIZATION_TYPE);
         
         JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
         HttpTransport httpTransport;
@@ -139,19 +160,34 @@ public class GoogleAdminAdapter implements BridgeAdapter {
             httpTransport = GoogleNetHttpTransport.newTrustedTransport();
             List<String> scopes = new ArrayList<String>();
             scopes.add(DirectoryScopes.ADMIN_DIRECTORY_USER);
-            credential = new GoogleCredential.Builder()
-                .setTransport(httpTransport)
-                .setJsonFactory(JSON_FACTORY)
-                .setServiceAccountId(email)
-                .setServiceAccountPrivateKeyFromP12File(new java.io.File(p12File))
-                .setServiceAccountScopes(scopes)
-                .setServiceAccountUser(userImpersonation)
-                .build();
+            
+             // P12 File is supported for backwards compatibility
+            if (authorizationType.equals("P12 File")) {
+                credential = new GoogleCredential.Builder()
+                    .setTransport(httpTransport)
+                    .setJsonFactory(JSON_FACTORY)
+                    .setServiceAccountId(email)   
+                    .setServiceAccountPrivateKeyFromP12File(new java.io.File(p12Location))
+                    .setServiceAccountScopes(scopes)
+                    .setServiceAccountUser(userImpersonation)
+                    .build();
+            } else {
+                credential = new GoogleCredential.Builder()
+                    .setTransport(httpTransport)
+                    .setJsonFactory(JSON_FACTORY)
+                    .setServiceAccountId(email)   
+                    .setServiceAccountPrivateKey(getPrivateKey(privateKeyString))
+                    .setServiceAccountScopes(scopes)
+                    .setServiceAccountUser(userImpersonation)
+                    .build();
+            }
             
         } catch (GeneralSecurityException gse) {
             throw new BridgeError(gse);
         } catch (IOException ioe) {
             throw new BridgeError(ioe);
+        } catch (Exception ex) {
+            throw new BridgeError(ex);
         }
         
         Directory directory = new Directory.Builder(httpTransport, JSON_FACTORY, credential).build();
@@ -300,5 +336,33 @@ public class GoogleAdminAdapter implements BridgeAdapter {
         }
         
         return users;
+    }
+    
+    public PrivateKey getPrivateKey(String privateKey) throws Exception {
+        // Read in the key into a String
+        StringBuilder pkcs8Lines = new StringBuilder();
+        BufferedReader rdr = new BufferedReader(new StringReader(privateKey));
+        String line;
+        while ((line = rdr.readLine()) != null) {
+            pkcs8Lines.append(line);
+        }
+
+        // Remove the "BEGIN" and "END" lines, as well as any whitespace
+
+        String pkcs8Pem = pkcs8Lines.toString();
+        pkcs8Pem = pkcs8Pem.replace("-----BEGIN PRIVATE KEY-----", "");
+        pkcs8Pem = pkcs8Pem.replace("-----END PRIVATE KEY-----", "");
+        pkcs8Pem = pkcs8Pem.replaceAll("\\s+","");
+
+        // Base64 decode the result
+
+        byte [] pkcs8EncodedBytes = Base64.getDecoder().decode(pkcs8Pem);
+
+        // extract the private key
+
+        PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(pkcs8EncodedBytes);
+        KeyFactory kf = KeyFactory.getInstance("RSA");
+        PrivateKey privKey = kf.generatePrivate(keySpec);
+        return privKey;
     }
 }
