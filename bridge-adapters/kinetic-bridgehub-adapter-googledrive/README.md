@@ -29,8 +29,7 @@ This adapter is used to make bridge calls to the google drive api endpoints.
 | Folders                   | Search for a folder |
 
 ## Fields
-Fields that will be returned with the record.  If no fields are provided then all fields will be
-returned.
+Fields that will be returned with the record.  If no fields are provided then no fields will be returned.
 
 ## Qualification (Query)
 ex: title contains 'joe'.  Visit [Google Drive API v2](https://developers.google.com/drive/api/v2/search-files) for additional query options.
@@ -38,6 +37,8 @@ ex: title contains 'joe'.  Visit [Google Drive API v2](https://developers.google
 ### Notes
 * Setting up a Google API Project is required.  Visit [Google Play Developer API](https://developers.google.com/android-publisher/getting_started) doc for information on how to set up project.
 * A [Service account](https://developers.google.com/android-publisher/getting_started#using_a_service_account) is required.
+* Set [Delegate domain-wide](https://developers.google.com/admin-sdk/directory/v1/guides/delegation#delegate_domain-wide_authority_to_your_service_account) authority to your service account.
+    * Add https://www.googleapis.com/auth/admin.directory.user [OAuth Scope](https://developers.google.com/identity/protocols/oauth2/scopes) to the service account.
 * At the google developer console
     1. Select the project from the dropdown
     2. Click **Credentials** from the left hand menu
@@ -55,7 +56,7 @@ ex: title contains 'joe'.  Visit [Google Drive API v2](https://developers.google
 
 Private Key Example:
 -----BEGIN PRIVATE KEY-----
-MIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQCZ7VJdnuZR2w5P
+MIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkw8gSlAgEAAoIBAQCZ7VJdnuZR2w5P
 ...
 TP62zYhLwBIKTVg9+3VQQmc1Lw==
 -----END PRIVATE KEY-----
