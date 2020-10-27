@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.kineticdata.bridges.adapter</groupId>
     <artifactId>kinetic-bridgehub-adapter-googleadmin</artifactId>
-    <version>1.0.2</version>
+    <version>1.1.0</version>
     <packaging>jar</packaging>
 
     <scm>
@@ -35,9 +35,15 @@
 
     <dependencies>
         <dependency>
+            <groupId>com.kineticdata.agent</groupId>
+            <artifactId>kinetic-agent-adapter</artifactId>
+            <version>1.1.0</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.10</version>
+            <version>4.13.1</version>
             <scope>test</scope>
             <type>jar</type>
         </dependency>
@@ -69,11 +75,6 @@
             <version>directory_v1-rev63-1.21.0</version>
         </dependency>
         <dependency>
-            <groupId>com.kineticdata.agent</groupId>
-            <artifactId>kinetic-agent-adapter</artifactId>
-            <version>1.0.0</version>
-        </dependency>
-        <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>1.7.10</version>
@@ -83,9 +84,17 @@
             <artifactId>guava</artifactId>
             <version>19.0</version>
         </dependency>
+        <dependency>
+            <groupId>com.kineticdata.agent</groupId>
+            <artifactId>kinetic-agent-adapter</artifactId>
+            <version>1.1.0</version>
+            <type>jar</type>
+        </dependency>
     </dependencies>
     <name>kinetic-bridgehub-adapter-googleadmin</name>
     <properties>
+        <!-- Uncomment below to build code -->
+        <!--<maven.test.skip>true</maven.test.skip>-->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>

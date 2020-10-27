@@ -1,5 +1,5 @@
-# Kinetic Bridgehub Adapter Googleadmin
-This adapter is used to make bridge calls to the google drive api endpoints.
+# Kinetic Bridgehub Adapter Google Admin
+This adapter is used to make bridge calls to the google admin api endpoints.
 
 # Google Admin Bridge Information
 ---
