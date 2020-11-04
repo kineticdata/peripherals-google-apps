@@ -91,7 +91,8 @@ public class GoogleDriveAdapter implements BridgeAdapter {
         new ConfigurableProperty(Properties.P12_FILE)
             .setDependency(Properties.AUTHORIZATION_TYPE, "P12 File"),
         new ConfigurableProperty(Properties.PRIVATE_KEY)
-            .setDependency(Properties.AUTHORIZATION_TYPE, "Private Key"),
+            .setDependency(Properties.AUTHORIZATION_TYPE, "Private Key")
+            .setIsSensitive(true),
         new ConfigurableProperty(Properties.PROPERTY_USER_IMPERSONATION).setIsRequired(true),            
         new ConfigurableProperty(Properties.PROPERTY_EXPIRATION_SCRIPT)
     );

@@ -8,8 +8,8 @@
 
     <name>kinetic-bridgehub-adapter-googledrive</name>
     <scm>
-        <connection>scm:git:https://github.com/kineticcommunity/kinetic-bridgehub-adapter-googledrive.git</connection>
-        <developerConnection>scm:git:https://github.com/kineticcommunity/kinetic-bridgehub-adapter-googledrive.git</developerConnection>
+        <connection>scm:git:https://github.com/kineticdata/peripherals-google-apps</connection>
+        <developerConnection>scm:git:https://github.com/kineticdata/peripherals-google-apps.git</developerConnection>
     </scm>
 
     <distributionManagement>
@@ -70,7 +70,7 @@
     </dependencies>
     <properties>
         <!-- Uncomment below to build code -->
-        <!--<maven.test.skip>true</maven.test.skip>-->
+        <maven.test.skip>true</maven.test.skip>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
