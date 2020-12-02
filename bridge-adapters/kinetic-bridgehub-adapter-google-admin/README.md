@@ -1,5 +1,5 @@
 # Kinetic Bridgehub Adapter Google Admin
-This adapter is used to make bridge calls to the google admin api endpoints.
+This adapter is used to make bridge calls to the Google admin api endpoints.
 
 # Google Admin Bridge Information
 ---
@@ -35,7 +35,7 @@ Fields that will be returned with the record.  If no fields are provided then no
 ex: name:'joe'.  Visit [Google Admin API v1](https://developers.google.com/admin-sdk/directory/v1/guides/search-users#examples) for additional query options.
 
 ## Google project setup
-Setting up a Google API Project is required. To complete all of the google project setup steps the user should have google super admin privileges.  The ability to access the google developer console is required to crate the project.  Adding domain wide delegation to the service account requires super users privileges.
+Setting up a Google API Project is required. To complete all of the Google project setup steps the user should have Google super admin privileges.  The ability to access the Google developer console is required to create the project.  Adding domain wide delegation to the service account requires super users privileges.
 
 ### Create project
   1. Go to the Google API Console at https://console.developers.google.com/project. 
@@ -53,7 +53,7 @@ A [Service account](https://developers.google.com/admin-sdk/directory/v1/guides/
   3. Click **+ CREATE CREDENTIALS** button near the top of the screen.
   4. Choose **Service Account** from the dropdown.
      1. Give the account a name.
-         * An email for the **Service Account** is generated.  This will a configuration value for the **Plugin** later.
+         * An email for the **Service Account** is generated.  This will be a configuration value for the **Plugin** later.
      2. Add a description (optional)
      3. Click **CREATE**.
      4.  Click **DONE**.
@@ -71,6 +71,7 @@ The adapter has two methods for adding access credentials; **P12 file** or **Pri
      * To configure the bridge adapter to use the **P12 file**, access to the file system that the __Agent__ is running on is required.
      * If you don't have access to the __Agent's__ file system the the **P12 file** needs to be converted to a **Private Key**.
 #### Extract **Private Key** from  **P12 file**
+Not all machines are capable of running these commands.  Access to the openssl command (which includes OSX and most versions of Linux by default) is required.
   1. In the terminal run `openssl pkcs12 -info -in INFILE.p12 -nodes -nocerts` command.
      * Visit [Private Key from the P12 file](https://www.ssl.com/how-to/export-certificates-private-key-from-pkcs12-file-with-openssl/) for more information.
   2. Copy the **Private Key** to config (Do not edit)
