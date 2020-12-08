@@ -81,7 +81,7 @@ Not all machines are capable of running these commands.  Access to the openssl c
 ### Enable API access for project
   1. Open the [API Console Dashboard](https://console.developers.google.com/apis/dashboard) and ensure the newly created project is selected from the top navigation bar.
   2. Click **+ ENABLE APIS AND SERVICES** button near the top of the screen.
-  4. Search for **GOOGLE DRIVE** and select it form the list.
+  4. Search for **GOOGLE DRIVE** and select it from the list.
   5. Click on the **ENABLE** button.
 
 ### Give Service Account **Domain-Wide Delegation** 
