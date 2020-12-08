@@ -24,10 +24,18 @@ import com.google.api.services.drive.model.ChildReference;
 import com.google.api.services.drive.model.FileList;
 import com.google.api.services.drive.model.File;
 import com.kineticdata.bridgehub.adapter.BridgeUtils;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.StringReader;
 import java.security.GeneralSecurityException;
+import java.security.KeyFactory;
+import java.security.PrivateKey;
+import java.security.spec.PKCS8EncodedKeySpec;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.http.HttpEntity;
@@ -67,20 +75,31 @@ public class GoogleDriveAdapter implements BridgeAdapter {
     /** Defines the collection of property names for the adapter */
     public static class Properties {
         public static final String PROPERTY_EMAIL = "Service Account Email";
-        public static final String PROPERTY_P12_FILE = "P12 File Location";
+        public static final String AUTHORIZATION_TYPE = "Authorization Type";
+        public static final String P12_FILE = "P12 File Location";
+        public static final String PRIVATE_KEY = "Private Key";
         public static final String PROPERTY_USER_IMPERSONATION = "Impersonated User Email";
         public static final String PROPERTY_EXPIRATION_SCRIPT = "Google Apps Expiration Script Url";
     }
     
     private final ConfigurablePropertyMap properties = new ConfigurablePropertyMap(
         new ConfigurableProperty(Properties.PROPERTY_EMAIL).setIsRequired(true),
-        new ConfigurableProperty(Properties.PROPERTY_P12_FILE).setIsRequired(true),
-        new ConfigurableProperty(Properties.PROPERTY_USER_IMPERSONATION).setIsRequired(true),
+        new ConfigurableProperty(Properties.AUTHORIZATION_TYPE)
+            .setIsRequired(true)
+            .setPossibleValues("P12 File", "Private Key")
+            .setValue("P12 File"),
+        new ConfigurableProperty(Properties.P12_FILE)
+            .setDependency(Properties.AUTHORIZATION_TYPE, "P12 File"),
+        new ConfigurableProperty(Properties.PRIVATE_KEY)
+            .setDependency(Properties.AUTHORIZATION_TYPE, "Private Key")
+            .setIsSensitive(true),
+        new ConfigurableProperty(Properties.PROPERTY_USER_IMPERSONATION).setIsRequired(true),            
         new ConfigurableProperty(Properties.PROPERTY_EXPIRATION_SCRIPT)
     );
 
     private String serviceAccountEmail;
     private String p12Location;
+    private String privateKeyString;
     private String impersonatedUser;
     private String expirationScript;
     Drive drive;
@@ -93,10 +112,12 @@ public class GoogleDriveAdapter implements BridgeAdapter {
     @Override
     public void initialize() throws BridgeError {
         this.serviceAccountEmail = properties.getValue(Properties.PROPERTY_EMAIL);
-        this.p12Location = properties.getValue(Properties.PROPERTY_P12_FILE);
+        this.p12Location = properties.getValue(Properties.P12_FILE);
+        this.privateKeyString = properties.getValue(Properties.PRIVATE_KEY);
         this.impersonatedUser = properties.getValue(Properties.PROPERTY_USER_IMPERSONATION);
         this.prevTokenMap = new HashMap<String,Map>();
         this.expirationScript = properties.getValue(Properties.PROPERTY_EXPIRATION_SCRIPT);
+        String authorizationType = properties.getValue(Properties.AUTHORIZATION_TYPE);
         
         JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
         HttpTransport httpTransport;
@@ -105,19 +126,34 @@ public class GoogleDriveAdapter implements BridgeAdapter {
             httpTransport = GoogleNetHttpTransport.newTrustedTransport();
             List<String> scopes = new ArrayList<String>();
             scopes.add(DriveScopes.DRIVE);
-            credential = new GoogleCredential.Builder()
-                .setTransport(httpTransport)
-                .setJsonFactory(JSON_FACTORY)
-                .setServiceAccountId(serviceAccountEmail)
-                .setServiceAccountPrivateKeyFromP12File(new java.io.File(p12Location))
-                .setServiceAccountScopes(scopes)
-                .setServiceAccountUser(impersonatedUser)
-                .build();
+            
+            // P12 File is supported for backwards compatibility
+            if (authorizationType.equals("P12 File")) {
+                credential = new GoogleCredential.Builder()
+                    .setTransport(httpTransport)
+                    .setJsonFactory(JSON_FACTORY)
+                    .setServiceAccountId(serviceAccountEmail)   
+                    .setServiceAccountPrivateKeyFromP12File(new java.io.File(p12Location))
+                    .setServiceAccountScopes(scopes)
+                    .setServiceAccountUser(impersonatedUser)
+                    .build();
+            } else {
+                credential = new GoogleCredential.Builder()
+                    .setTransport(httpTransport)
+                    .setJsonFactory(JSON_FACTORY)
+                    .setServiceAccountId(serviceAccountEmail)   
+                    .setServiceAccountPrivateKey(getPrivateKey(privateKeyString))
+                    .setServiceAccountScopes(scopes)
+                    .setServiceAccountUser(impersonatedUser)
+                    .build();
+            }
             
         } catch (GeneralSecurityException gse) {
             throw new BridgeError(gse);
         } catch (IOException gse) {
             throw new BridgeError(gse);
+        } catch (Exception ex) {
+            throw new BridgeError(ex);
         }
         
         this.drive = new Drive.Builder(httpTransport, JSON_FACTORY, credential).build();
@@ -438,6 +474,34 @@ public class GoogleDriveAdapter implements BridgeAdapter {
     
     private String removeFolderId(String query) {
         return query.replaceFirst("folderId\\s?=\\s?[\"'](.*?)[\"'](?: and)?", "");
+    }
+    
+    public PrivateKey getPrivateKey(String privateKey) throws Exception {
+        // Read in the key into a String
+        StringBuilder pkcs8Lines = new StringBuilder();
+        BufferedReader rdr = new BufferedReader(new StringReader(privateKey));
+        String line;
+        while ((line = rdr.readLine()) != null) {
+            pkcs8Lines.append(line);
+        }
+
+        // Remove the "BEGIN" and "END" lines, as well as any whitespace
+
+        String pkcs8Pem = pkcs8Lines.toString();
+        pkcs8Pem = pkcs8Pem.replace("-----BEGIN PRIVATE KEY-----", "");
+        pkcs8Pem = pkcs8Pem.replace("-----END PRIVATE KEY-----", "");
+        pkcs8Pem = pkcs8Pem.replaceAll("\\s+","");
+
+        // Base64 decode the result
+
+        byte [] pkcs8EncodedBytes = Base64.getDecoder().decode(pkcs8Pem);
+
+        // extract the private key
+
+        PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(pkcs8EncodedBytes);
+        KeyFactory kf = KeyFactory.getInstance("RSA");
+        PrivateKey privKey = kf.generatePrivate(keySpec);
+        return privKey;
     }
 
 }
