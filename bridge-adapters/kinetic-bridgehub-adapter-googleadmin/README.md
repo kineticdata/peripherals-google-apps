@@ -1,17 +1,17 @@
-# Kinetic Bridgehub Adapter Googledrive
-This adapter is used to make bridge calls to the Google drive api endpoints.
+# Kinetic Bridgehub Adapter Google Admin
+This adapter is used to make bridge calls to the Google admin api endpoints.
 
-# Google Drive Bridge Information
+# Google Admin Bridge Information
 ---
 ## Configuration Values
 | Name                      | Description |
 | :------------------------ | :------------------------- |
 | Service Account Email     | an account that belongs to your application instead of to an individual end user |
 | Authorization Type        | Select __P12 File__ or __Private Key__ |
-| Private Key               | Instructions for getting private key in notes below |
+| Private Key               | Instructions for getting the private key are below |
 | P12 File Location         | The path to the P12 File |
 | Impersonated User Email   | The email of the user that the request will be impersonating |
-| Google Apps Expiration Script Url | ??? |
+| Domain                    | The Google domain associated to the service account |
 
 ### Example Configuration
 | Name                      | Value |
@@ -21,18 +21,18 @@ This adapter is used to make bridge calls to the Google drive api endpoints.
 | Private Key               | **Private Key Example Below** |
 | P12 File Location         | /path/to/file |
 | Impersonated User Email   | joe.foo@acme.com |
+| Domain                    | acme.com |
 
 ## Supported Structures
 | Name                      | Description |
 | :------------------------ | :------------------------- |
-| Files                     | Search for a file |
-| Folders                   | Search for a folder |
+| Users                     | Search for a users |
 
 ## Fields
-Fields that will be returned with the record.  If no fields are provided then no fields will be returned. For a list of valid fields visit [Google Drive API](https://developers.google.com/drive/api/v2/reference/files#resource-representations)
+Fields that will be returned with the record.  If no fields are provided then no fields will be returned. For a list of valid fields visit [Google Admin API](https://developers.google.com/admin-sdk/directory/v1/guides/search-users#fields).
 
 ## Qualification (Query)
-ex: title contains 'joe'.  Visit [Google Drive API v2](https://developers.google.com/drive/api/v2/search-files) for additional query options.
+ex: name:'joe'.  Visit [Google Admin API v1](https://developers.google.com/admin-sdk/directory/v1/guides/search-users#examples) for additional query options.
 
 ## Google project setup
 Setting up a Google API Project is required. To complete all of the Google project setup steps the user should have Google super admin privileges.  The ability to access the Google developer console is required to create the project.  Adding domain wide delegation to the service account requires super users privileges.
@@ -43,7 +43,7 @@ Setting up a Google API Project is required. To complete all of the Google proje
      * Enter a name
      * Select an organization (if applicable)
      * Click Create
-
+  
 ### Add Service Account to project 
 A [Service account](https://developers.google.com/admin-sdk/directory/v1/guides/delegation#create_the_service_account_and_credentials) is required for the adapter configuration.
   1. Open the [API Console Dashboard](https://console.developers.google.com/apis/dashboard) and ensure the newly created project is selected from the top navigation bar.
@@ -51,7 +51,7 @@ A [Service account](https://developers.google.com/admin-sdk/directory/v1/guides/
   3. Click **+ CREATE CREDENTIALS** button near the top of the screen.
   4. Choose **Service Account** from the dropdown.
      1. Give the account a name.
-        * An email for the **Service Account** is generated.  This will be a configuration value for the **Plugin** later.
+         * An email for the **Service Account** is generated.  This will be a configuration value for the **Plugin** later.
      2. Add a description (optional)
      3. Click **CREATE**.
      4. Click **DONE**.
@@ -72,33 +72,32 @@ The adapter has two methods for adding access credentials; **P12 file** or **Pri
 
 #### Extract **Private Key** from  **P12 file**
 Not all machines are capable of running these commands.  Access to the openssl command (which includes OSX and most versions of Linux by default) is required.
-1. In the terminal run `openssl pkcs12 -info -in INFILE.p12 -nodes -nocerts` command.
-   * Visit [Private Key from the P12 file](https://www.ssl.com/how-to/export-certificates-private-key-from-pkcs12-file-with-openssl/) for more information.
-2. Copy the **Private Key** to config (Do not edit)
-   * The **Private Key** will be used in the configuration of the adapter.
-   * Below is an example of a successful extraction of the **Private Key**.  
+  1. In the terminal run `openssl pkcs12 -info -in INFILE.p12 -nodes -nocerts` command.
+     * Visit [Private Key from the P12 file](https://www.ssl.com/how-to/export-certificates-private-key-from-pkcs12-file-with-openssl/) for more information.
+  2. Copy the **Private Key** to config (Do not edit)
+     * The **Private Key** will be used in the configuration of the adapter.
+     * Below is an example of a successful extraction of the **Private Key**.  
 
 ### Enable API access for project
   1. Open the [API Console Dashboard](https://console.developers.google.com/apis/dashboard) and ensure the newly created project is selected from the top navigation bar.
   2. Click **+ ENABLE APIS AND SERVICES** button near the top of the screen.
-  4. Search for **GOOGLE DRIVE** and select it from the list.
+  4. Search for **ADMIN SDK** and select it from the list.
   5. Click on the **ENABLE** button.
-
-### Give Service Account **Domain-Wide Delegation** 
+  
+### Give Service Account **Domain-Wide Delegation**
 Set [Delegate domain-wide](https://developers.google.com/admin-sdk/directory/v1/guides/delegation#delegate_domain-wide_authority_to_your_service_account) authority to your service account.
   1. Open the [API Console Credentials](https://console.developers.google.com/apis/credentials)
   2. Select the Service Account from the table to get to the __Grant users access to this service account__ screen.
   3. Copy the Unique ID. __This is used in step 8__.
   4. Go to your domain's [Admin Console](admin.google.com).
-  5. Open the [Admin Console API Controls](https://admin.google.com/ac/owl) **(hamburger) Main menu > Security > API controls**.
+  5.  Open the [Admin Console API Controls](https://admin.google.com/ac/owl) **(hamburger) Main menu > Security > API controls**.
   6. In the **Domain wide delegation** pane, select **Manage Domain Wide Delegation**.
   7. Click **Add new**.
   8. In the **Client ID** field, enter the client ID copied from __step 3__.
-  9. In the OAuth Scopes field add `https://www.googleapis.com/auth/drive`.
-    * More info is available from the google developer documentation for [OAuth Scopes](https://developers.google.com/identity/protocols/oauth2/scopes).
+  9. In the OAuth Scopes field add `https://www.googleapis.com/auth/admin.directory.user`.
+     * more info on [OAuth Scopes](https://developers.google.com/identity/protocols/oauth2/scopes).
 
 ### Notes
-* The files that can be requested are limited to the files that the impersonated users has access to.
 * The adapter is not currently setup to use **JSON** keys.
 * All of the steps above are referencing Google API console.  These steps could also be done in a similar way using the Google Cloud Platform consoles.
 * It is important to keep the key's tags.
