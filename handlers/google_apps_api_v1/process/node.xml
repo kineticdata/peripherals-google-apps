@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<taskDefinition id="google_apps_api" name="Google Apps API v1" schema_version="1.0" version="1">
+  <author>support@kineticdata.com</author>
+  <description>A generic rest handler for the Google API.</description>
+  <helpurl></helpurl>
+  <visible>false</visible>
+  <deferrable>false</deferrable>
+  <parameters>
+    <parameter id="error_handling" label="Error Handling" required="true" tooltip="Determine what to return if an error is encountered." menu="Error Message,Raise Error">Error Message</parameter>
+    <parameter id="method" label="Method" required="true" menu="GET,POST,PUT,PATCH,DELETE" tooltip="GET,POST,PUT,PATCH,DELETE (Defaults to GET)">GET</parameter>
+    <parameter id="scope" label="Scope" required="true" tooltip="The permissions for the requested api"></parameter>
+    <parameter id="user" label="User" required="true" tooltip="The impresonated user that the request is being made for"></parameter>
+    <parameter id="url" label="url" required="true" tooltip="The fully qualified url to the api endpoint of the desired resource"></parameter>
+    <parameter id="body" label="Body" required="false" tooltip="JSON body if applicable (POST,PUT,PATCH)"></parameter>
+  </parameters>
+
+  <handler name="google_apps_api" version="1">
+    <infos>
+      <info name="service_account">&lt;%= @info['service_account'] %&gt;</info>
+      <info name="private_key">&lt;%= @info['private_key'] %&gt;</info>
+      <info name="enable_debug_logging">&lt;%= @info["enable_debug_logging"] %&gt;</info>
+    </infos>
+    <parameters>
+      <parameter name="error_handling">&lt;%= @parameters["error_handling"] %&gt;</parameter>
+      <parameter name="method">&lt;%= @parameters["method"] %&gt;</parameter>
+      <parameter name="scope">&lt;%= @parameters["scope"] %&gt;</parameter>
+      <parameter name="user">&lt;%= @parameters["user"] %&gt;</parameter>
+      <parameter name="url">&lt;%= @parameters["url"] %&gt;</parameter>
+      <parameter name="body">&lt;%= @parameters["body"] %&gt;</parameter>
+    </parameters>
+  </handler>
+  <results format="xml">
+    <result name="Response Body"/>
+    <result name="Response Code"/>
+    <result name="Handler Error Message"/>
+  </results>
+</taskDefinition>
