@@ -61,7 +61,7 @@ class GoogleAppsApiV1
         headers: {:content_type => "application/x-www-form-urlencoded", :accept => @accept}
 
       token = JSON.parse(tokenResponse)["access_token"]
-      puts "Token successfully retrieved" if token
+      puts "Token successfully retrieved" if token && @debug_logging_enabled
 
       # Make requrest for assets
       response = RestClient::Request.execute \
@@ -82,6 +82,11 @@ class GoogleAppsApiV1
       # Raise the error if instructed to, otherwise will fall through to
       # return an error message.
       raise if @error_handling == "Raise Error"
+    rescue JSON::ParserError => e
+      puts "There was an issue parsing the token response" if @debug_logging_enabled
+      error_message = e
+
+      raise if @error_handling == "Raise Error"      
     end
 
     # Return (and escape) the results that were defined in the node.xml
@@ -102,7 +107,7 @@ class GoogleAppsApiV1
     rsa_private = OpenSSL::PKey::RSA.new @private_key
     rsa_public = rsa_private.public_key
 
-    # Create experation for token
+    # Create expiration for token
     now = Time.now.to_i
     plusHour = now + 3600
 
@@ -131,7 +136,7 @@ class GoogleAppsApiV1
     footer = private_key.slice!("-----END PRIVATE KEY-----")
     
     idx = 1;
-    # Split PK into chuncks of 64 characters
+    # Split PK into chunks of 64 characters
     while private_key.length > 64 do
       x = private_key.slice!(0..63)  
       private_key_arr[idx] = x
@@ -146,7 +151,7 @@ class GoogleAppsApiV1
     # Rebuild private key
     private_key = private_key_arr.join("\n")
 
-    puts "Private key reformat successful"
+    puts "Private key reformat successful" if @debug_logging_enabled
     return private_key
   end
 

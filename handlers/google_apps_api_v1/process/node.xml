@@ -8,9 +8,9 @@
   <parameters>
     <parameter id="error_handling" label="Error Handling" required="true" tooltip="Determine what to return if an error is encountered." menu="Error Message,Raise Error">Error Message</parameter>
     <parameter id="method" label="Method" required="true" menu="GET,POST,PUT,PATCH,DELETE" tooltip="GET,POST,PUT,PATCH,DELETE (Defaults to GET)">GET</parameter>
-    <parameter id="scope" label="Scope" required="true" tooltip="The permissions for the requested api"></parameter>
-    <parameter id="user" label="User" required="true" tooltip="The impresonated user that the request is being made for"></parameter>
-    <parameter id="url" label="url" required="true" tooltip="The fully qualified url to the api endpoint of the desired resource"></parameter>
+    <parameter id="scope" label="Scope" required="true" tooltip="The permissions for the requested api. https://developers.google.com/identity/protocols/oauth2/scopes"></parameter>
+    <parameter id="user" label="User" required="true" tooltip="The impersonated user that the request is being made for."></parameter>
+    <parameter id="url" label="url" required="true" tooltip="The fully qualified url to the api endpoint of the desired resource. https://developers.google.com/apis-explorer"></parameter>
     <parameter id="body" label="Body" required="false" tooltip="JSON body if applicable (POST,PUT,PATCH)"></parameter>
   </parameters>
 
