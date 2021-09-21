@@ -6,7 +6,7 @@ Used for requests to the Google Cloud Apps REST API Client
 
 **private_key**: A key obtained from google cloud platform console. The final step of the service account creation instructions above walks through creating a key. **Important note below**
 
-**enable_debug_logging**: Yes or No. Controls logging behavior. 
+**enable_debug_logging**: True or False. Controls logging behavior. 
 
 ## Parameters
 **Error Handling**
