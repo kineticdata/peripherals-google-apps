@@ -2,7 +2,7 @@
 Used for requests to the Google Cloud Apps REST API Client
 
 ## Info Values
-**service_account**: An account used to interact with the api.  Instruction on creating a [service account](https://developers.google.com/identity/protocols/oauth2/service-account#creatinganaccount)
+**service_account**: A special type of Google account intended to represent a non-human user that needs to authenticate and be authorized to access data in Google APIs.  Instruction on creating a [service account](https://developers.google.com/identity/protocols/oauth2/service-account#creatinganaccount) The email address provided by Google is the value used by the handler.
 
 **private_key**: A key obtained from google cloud platform console. The final step of the service account creation instructions above walks through creating a key. **Important note below**
 
@@ -62,4 +62,4 @@ Used for requests to the Google Cloud Apps REST API Client
 * When the key is created for the service account a json file will be downloaded to your machine.  Copy the private_key from the file. 
   * An example input for the private_key info value: -----BEGIN PRIVATE KEY-----\nMIIEvgIBA...PH4\nrqH7SSPuSLIaiPJDgGfIeF5M\n-----END PRIVATE KEY-----\n
   * Make sure to leave the header and footer and all new lines in place.
-* global domain endpoints require `?domain=<your domain>.com` be added to the parameters of the request.  This is done in the **URL** handler parameter
+* Global domain endpoints require `?domain=<your domain>.com` be added to the parameters of the request.  This is done in the **URL** handler parameter
