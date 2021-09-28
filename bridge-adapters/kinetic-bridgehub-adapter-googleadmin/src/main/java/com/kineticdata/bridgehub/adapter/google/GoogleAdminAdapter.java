@@ -89,9 +89,11 @@ public class GoogleAdminAdapter implements BridgeAdapter {
             .setPossibleValues("P12 File", "Private Key")
             .setValue("P12 File"),
         new ConfigurableProperty(Properties.P12_FILE)
-            .setDependency(Properties.AUTHORIZATION_TYPE, "P12 File"),
+            .setDependency(Properties.AUTHORIZATION_TYPE, "P12 File")
+            .setIsRequired(true),
         new ConfigurableProperty(Properties.PRIVATE_KEY)
             .setDependency(Properties.AUTHORIZATION_TYPE, "Private Key")
+            .setIsRequired(true)
             .setIsSensitive(true),
         new ConfigurableProperty(Properties.USER_IMPERSONATION).setIsRequired(true),
         new ConfigurableProperty(Properties.DOMAIN).setIsRequired(false)
